@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AivsHuman - AI mi İnsan mı?</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script>
+        const { createApp, ref, computed } = Vue;
+
+        createApp({
+            setup() {
+                const currentView = ref('home');
+                const currentQuestion = ref(1);
+                const totalQuestions = ref(10);
+                const answered = ref(false);
+                const isCorrect = ref(false);
+                const currentImage = ref(null);
+                const correctAnswers = ref(0);
+                const wrongAnswers = ref(0);
+
+                // Mock data
+                const mockImages = [
+                    { id: 1, url: 'https://picsum.photos/600/400?random=1', label: 'human' },
+                    { id: 2, url: 'https://picsum.photos/600/400?random=2', label: 'ai' },
+                    { id: 3, url: 'https://picsum.photos/600/400?random=3', label: 'human' },
+                    { id: 4, url: 'https://picsum.photos/600/400?random=4', label: 'ai' },
+                    { id: 5, url: 'https://picsum.photos/600/400?random=5', label: 'human' },
+                    { id: 6, url: 'https://picsum.photos/600/400?random=6', label: 'ai' },
+                    { id: 7, url: 'https://picsum.photos/600/400?random=7', label: 'human' },
+                    { id: 8, url: 'https://picsum.photos/600/400?random=8', label: 'ai' },
+                    { id: 9, url: 'https://picsum.photos/600/400?random=9', label: 'human' },
+                    { id: 10, url: 'https://picsum.photos/600/400?random=10', label: 'ai' },
+                ];
+
+                const successRate = computed(() => 
+                    Math.round((correctAnswers.value / totalQuestions.value) * 100)
+                );
+
+                const successRateColor = computed(() => {
+                    const rate = successRate.value;
+                    if (rate >= 80) return 'text-green-600';
+                    if (rate >= 60) return 'text-yellow-600';
+                    return 'text-red-600';
+                });
+
+                const startGame = () => {
+                    currentView.value = 'game';
+                    currentQuestion.value = 1;
+                    correctAnswers.value = 0;
+                    wrongAnswers.value = 0;
+                    loadQuestion();
+                };
+
+                const loadQuestion = () => {
+                    if (currentQuestion.value <= totalQuestions.value) {
+                        currentImage.value = mockImages[currentQuestion.value - 1];
+                        answered.value = false;
+                    }
+                };
+
+                const makeGuess = (guess) => {
+                    answered.value = true;
+                    isCorrect.value = guess === currentImage.value.label;
+                    
+                    if (isCorrect.value) {
+                        correctAnswers.value++;
+                    } else {
+                        wrongAnswers.value++;
+                    }
+                };
+
+                const nextQuestion = () => {
+                    if (currentQuestion.value < totalQuestions.value) {
+                        currentQuestion.value++;
+                        loadQuestion();
+                    } else {
+                        currentView.value = 'result';
+                    }
+                };
+
+                const goHome = () => {
+                    currentView.value = 'home';
+                    currentQuestion.value = 1;
+                    correctAnswers.value = 0;
+                    wrongAnswers.value = 0;
+                };
+
+                const shareToTwitter = () => {
+                    const text = `AivsHuman'da ${successRate.value}% başarı oranı elde ettim! AI vs İnsan görselleri ayırt etmede ne kadar iyisin? #AivsHuman`;
+                    const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
+                    window.open(url, '_blank');
+                };
+
+                return {
+                    currentView,
+                    currentQuestion,
+                    totalQuestions,
+                    answered,
+                    isCorrect,
+                    currentImage,
+                    correctAnswers,
+                    wrongAnswers,
+                    successRate,
+                    successRateColor,
+                    startGame,
+                    makeGuess,
+                    nextQuestion,
+                    goHome,
+                    shareToTwitter
+                };
+            },
+            template: `
+                <div class="min-h-screen" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                    <!-- Home View -->
+                    <div v-if="currentView === 'home'" class="min-h-screen flex items-center justify-center p-4">
+                        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
+                            <h1 class="text-4xl font-bold text-gray-800 mb-2">AivsHuman</h1>
+                            <p class="text-gray-600 mb-8">AI mi İnsan mı? Tahmin et!</p>
+                            
+                            <div class="space-y-4 mb-8">
+                                <div class="p-4 bg-blue-50 rounded-lg border-2 border-blue-200">
+                                    <h3 class="font-semibold text-blue-800">Görsel Mod</h3>
+                                    <p class="text-sm text-blue-600 mt-1">Görsellerin AI ya da insan yapımı olduğunu tahmin et</p>
+                                </div>
+                                
+                                <div class="p-4 bg-gray-100 rounded-lg border-2 border-gray-200 opacity-50">
+                                    <h3 class="font-semibold text-gray-500">Metin Mod</h3>
+                                    <p class="text-sm text-gray-400 mt-1">Yakında...</p>
+                                </div>
+                                
+                                <div class="p-4 bg-gray-100 rounded-lg border-2 border-gray-200 opacity-50">
+                                    <h3 class="font-semibold text-gray-500">Website Mod</h3>
+                                    <p class="text-sm text-gray-400 mt-1">Yakında...</p>
+                                </div>
+                                
+                                <div class="p-4 bg-gray-100 rounded-lg border-2 border-gray-200 opacity-50">
+                                    <h3 class="font-semibold text-gray-500">Karışık Mod</h3>
+                                    <p class="text-sm text-gray-400 mt-1">Yakında...</p>
+                                </div>
+                            </div>
+                            
+                            <button 
+                                @click="startGame"
+                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-lg transition-colors duration-200 text-lg"
+                            >
+                                Başla
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Game View -->
+                    <div v-if="currentView === 'game'" class="min-h-screen flex items-center justify-center p-4">
+                        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-2xl w-full">
+                            <div class="text-center mb-6">
+                                <h1 class="text-3xl font-bold text-gray-800 mb-2">Görsel Mod</h1>
+                                <p class="text-gray-600">Bu görsel AI tarafından mı üretildi, yoksa insan tarafından mı çekildi?</p>
+                                <div class="text-lg font-semibold text-blue-600 mt-2">
+                                    Soru {{ currentQuestion }} / {{ totalQuestions }}
+                                </div>
+                            </div>
+                            
+                            <div class="mb-8" v-if="currentImage">
+                                <img 
+                                    :src="currentImage.url" 
+                                    :alt="'Soru ' + currentQuestion"
+                                    class="w-full max-h-96 object-cover rounded-lg shadow-lg"
+                                />
+                            </div>
+                            
+                            <div class="flex gap-4 mb-6" v-if="!answered">
+                                <button 
+                                    @click="makeGuess('human')"
+                                    class="flex-1 bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 rounded-lg transition-colors duration-200"
+                                >
+                                    İnsan
+                                </button>
+                                <button 
+                                    @click="makeGuess('ai')"
+                                    class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-6 rounded-lg transition-colors duration-200"
+                                >
+                                    AI
+                                </button>
+                            </div>
+                            
+                            <div v-if="answered" class="text-center mb-6">
+                                <div :class="isCorrect ? 'text-green-600' : 'text-red-600'" class="text-xl font-bold mb-2">
+                                    {{ isCorrect ? '✅ Doğru!' : '❌ Yanlış!' }}
+                                </div>
+                                <p class="text-gray-600 mb-4">
+                                    Bu görsel <strong>{{ currentImage?.label === 'ai' ? 'AI' : 'İnsan' }}</strong> tarafından üretildi.
+                                </p>
+                                <button 
+                                    @click="nextQuestion"
+                                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200"
+                                >
+                                    {{ currentQuestion < totalQuestions ? 'Sonraki' : 'Sonuçları Gör' }}
+                                </button>
+                            </div>
+                            
+                            <div class="text-center text-gray-500">
+                                <div class="text-sm">Doğru: {{ correctAnswers }} | Yanlış: {{ wrongAnswers }}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Result View -->
+                    <div v-if="currentView === 'result'" class="min-h-screen flex items-center justify-center p-4">
+                        <div class="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
+                            <h1 class="text-3xl font-bold text-gray-800 mb-6">Oyun Bitti!</h1>
+                            
+                            <div class="mb-8">
+                                <div class="text-6xl font-bold mb-4" :class="successRateColor">
+                                    {{ successRate }}%
+                                </div>
+                                <p class="text-xl text-gray-600 mb-6">Başarı Oranı</p>
+                                
+                                <div class="grid grid-cols-2 gap-4 text-center">
+                                    <div class="bg-green-50 p-4 rounded-lg border border-green-200">
+                                        <div class="text-2xl font-bold text-green-600">{{ correctAnswers }}</div>
+                                        <div class="text-sm text-green-600">Doğru</div>
+                                    </div>
+                                    <div class="bg-red-50 p-4 rounded-lg border border-red-200">
+                                        <div class="text-2xl font-bold text-red-600">{{ wrongAnswers }}</div>
+                                        <div class="text-sm text-red-600">Yanlış</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="space-y-4">
+                                <button 
+                                    @click="startGame"
+                                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-lg transition-colors duration-200"
+                                >
+                                    Tekrar Oyna
+                                </button>
+                                
+                                <button 
+                                    @click="goHome"
+                                    class="w-full bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-lg transition-colors duration-200"
+                                >
+                                    Ana Sayfa
+                                </button>
+                            </div>
+                            
+                            <div class="mt-8 pt-6 border-t border-gray-200">
+                                <p class="text-sm text-gray-500 mb-4">Sonuçları paylaş:</p>
+                                <div class="flex gap-2 justify-center">
+                                    <button 
+                                        @click="shareToTwitter"
+                                        class="bg-blue-400 hover:bg-blue-500 text-white px-4 py-2 rounded-lg text-sm transition-colors duration-200"
+                                    >
+                                        Twitter
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `
+        }).mount('#app');
+    </script>
+</body>
+</html>
