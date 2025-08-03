@@ -10,6 +10,19 @@
     </div>
 
     <div class="relative z-10 max-w-3xl mx-auto">
+      <!-- Home Button -->
+      <div class="mb-4 scale-in">
+        <button 
+          @click="router.push('/')"
+          class="home-btn group"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+          </svg>
+          <span>Ana Sayfa</span>
+        </button>
+      </div>
+
       <!-- Game Not Started - Enhanced -->
       <div v-if="!isActive" class="text-center scale-in">
         <div class="modern-card rounded-3xl p-8 mb-8 time-rush-intro">
@@ -378,6 +391,29 @@ onUnmounted(() => {
     #dc2626 100%);
   background-size: 300% 300%;
   animation: gradientFlow 12s ease infinite;
+}
+
+/* Home Button */
+.home-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(20px);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.home-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 @keyframes gradientFlow {

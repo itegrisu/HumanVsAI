@@ -106,39 +106,6 @@
             </div>
           </div>
           
-          <!-- Coming Soon Modes -->
-          <div class="game-mode-card disabled slide-in-right">
-            <div class="flex items-center space-x-4">
-              <div class="mode-icon">📝</div>
-              <div class="text-left flex-1">
-                <h3 class="font-semibold text-white/60">Metin Mod</h3>
-                <p class="text-white/40 text-sm mt-1">Yakında geliyor...</p>
-              </div>
-              <div class="status-indicator disabled"></div>
-            </div>
-          </div>
-          
-          <div class="game-mode-card disabled slide-in-left">
-            <div class="flex items-center space-x-4">
-              <div class="mode-icon">🌐</div>
-              <div class="text-left flex-1">
-                <h3 class="font-semibold text-white/60">Website Mod</h3>
-                <p class="text-white/40 text-sm mt-1">Yakında geliyor...</p>
-              </div>
-              <div class="status-indicator disabled"></div>
-            </div>
-          </div>
-          
-          <div class="game-mode-card disabled slide-in-right">
-            <div class="flex items-center space-x-4">
-              <div class="mode-icon">🔀</div>
-              <div class="text-left flex-1">
-                <h3 class="font-semibold text-white/60">Karışık Mod</h3>
-                <p class="text-white/40 text-sm mt-1">Yakında geliyor...</p>
-              </div>
-              <div class="status-indicator disabled"></div>
-            </div>
-          </div>
         </div>
         
         <!-- Enhanced Action Buttons -->

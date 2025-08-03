@@ -9,6 +9,19 @@
     </div>
 
     <div class="relative z-10 max-w-5xl mx-auto">
+      <!-- Home Button -->
+      <div class="mb-4 scale-in">
+        <button 
+          @click="router.push('/')"
+          class="home-btn group"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
+          </svg>
+          <span>Ana Sayfa</span>
+        </button>
+      </div>
+
       <!-- Enhanced Header with Score Display -->
       <div class="text-center mb-8 scale-in">
         <!-- Game Mode Badge -->
@@ -188,7 +201,7 @@
               <div class="text-white/60 text-xs">Doğru</div>
             </div>
             <div class="text-center">
-              <div class="text-xl font-bold text-red-400">{{ wrongAnswers }}</div>
+              <div class="text-xl font-bold text-red-500 bg-red-500/20 px-3 py-1 rounded-lg border border-red-500/30">{{ wrongAnswers }}</div>
               <div class="text-white/60 text-xs">Yanlış</div>
             </div>
           </div>
@@ -327,39 +340,37 @@ const makeGuess = (guess: 'ai' | 'human') => {
 }
 
 const nextQuestion = () => {
-  setTimeout(() => {
-    if (currentQuestion.value < totalQuestions.value) {
-      currentQuestion.value++
-      loadQuestion()
-      preloadNextImages() // Bir sonraki soruları önceden yükle
-    } else {
-      // Game finished
-      sounds.gameComplete() // Oyun bitirme sesi
-      
-      const accuracy = (correctAnswers.value / totalQuestions.value) * 100
-      
-      leaderboardStore.addScore({
-        playerName: userStore.userName || 'Anonim',
-        score: score.value, // Computed score kullan
-        totalQuestions: totalQuestions.value
-      })
-      
-      // Update user stats
-      userStore.updateStats({
-        score: score.value, // Computed score kullan
-        accuracy: accuracy,
-        gameType: 'normal'
-      })
-      
-      // Set game results and go to results page
-      gameStore.setGameResults({
-        correct: correctAnswers.value,
-        wrong: wrongAnswers.value,
-        total: totalQuestions.value
-      })
-      router.push('/result')
-    }
-  }, 800) // TimeRushView ile aynı süre
+  if (currentQuestion.value < totalQuestions.value) {
+    currentQuestion.value++
+    loadQuestion()
+    preloadNextImages() // Bir sonraki soruları önceden yükle
+  } else {
+    // Game finished
+    sounds.gameComplete() // Oyun bitirme sesi
+    
+    const accuracy = (correctAnswers.value / totalQuestions.value) * 100
+    
+    leaderboardStore.addScore({
+      playerName: userStore.userName || 'Anonim',
+      score: score.value, // Computed score kullan
+      totalQuestions: totalQuestions.value
+    })
+    
+    // Update user stats
+    userStore.updateStats({
+      score: score.value, // Computed score kullan
+      accuracy: accuracy,
+      gameType: 'normal'
+    })
+    
+    // Set game results and go to results page
+    gameStore.setGameResults({
+      correct: correctAnswers.value,
+      wrong: wrongAnswers.value,
+      total: totalQuestions.value
+    })
+    router.push('/result')
+  }
 }
 
 // Bir sonraki soruları önceden yükle
@@ -387,6 +398,29 @@ const preloadNextImages = () => {
     #4facfe 100%);
   background-size: 300% 300%;
   animation: gradientFlow 15s ease infinite;
+}
+
+/* Home Button */
+.home-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(20px);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.home-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 @keyframes gradientFlow {
