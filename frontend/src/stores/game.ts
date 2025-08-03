@@ -57,7 +57,7 @@ export const useGameStore = defineStore('game', () => {
   const isLoading = ref(false)
 
   // API Base URL
-  const API_BASE = 'http://localhost:5000/api'
+  const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'
 
   // Getters
   const isAllCategoriesSelected = computed(() => 

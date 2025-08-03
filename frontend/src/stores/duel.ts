@@ -85,8 +85,11 @@ export const useDuelStore = defineStore('duel', () => {
       await connection.value.stop()
     }
 
+    // SignalR Hub URL
+    const hubUrl = import.meta.env.VITE_API_BASE_URL?.replace('/api', '') || 'http://localhost:5000'
+    
     connection.value = new signalR.HubConnectionBuilder()
-      .withUrl('http://localhost:5000/duelhub')
+      .withUrl(`${hubUrl}/duelhub`)
       .build()
 
     setupEventHandlers()
