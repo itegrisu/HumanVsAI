@@ -61,6 +61,6 @@ app.MapControllers();
 // Map SignalR hubs
 app.MapHub<DuelHub>("/duelhub");
 
-// Port configuration for deployment
-var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
+// Port configuration for Railway deployment
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 app.Run($"http://0.0.0.0:{port}");
