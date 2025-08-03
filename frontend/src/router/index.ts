@@ -1,10 +1,10 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import GameView from '../views/GameView.vue'
 import ResultView from '../views/ResultView.vue'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
       path: '/',
@@ -30,6 +30,16 @@ const router = createRouter({
       path: '/time-rush',
       name: 'timeRush',
       component: () => import('../views/TimeRushView.vue')
+    },
+    {
+      path: '/duel',
+      name: 'duel',
+      component: () => import('../views/DuelViewRealTime.vue')
+    },
+    {
+      path: '/duel/join/:roomId',
+      name: 'duelJoin',
+      component: () => import('../views/DuelViewRealTime.vue')
     },
     {
       path: '/time-rush/result/:score/:answered/:correct/:accuracy/:qps',
